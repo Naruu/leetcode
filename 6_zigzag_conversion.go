@@ -1,29 +1,26 @@
 func convert(s string, numRows int) string {
-    groupByRow := func (s string, numRows int) map[int] []byte {
-        grouped := map[int] []byte {}
-        for idx := 0; ; {
-            for i := 0; i < numRows; i += 1 {
-                grouped[i] = append(grouped[i], s[idx])
-                idx += 1
-                if idx >= len(s) {
-                    return grouped
-                }
-            }
-            for i := numRows - 2; i > 0; i -= 1 {
-                grouped[i] = append(grouped[i], s[idx])
-                idx += 1
-                if idx >= len(s) {
-                    return grouped
-                }
-            }
-        }
-    }
-    grouped := groupByRow(s, numRows)
-    answer := ""
-    for i := 0; i < numRows; i+= 1 {
-        answer += string(grouped[i])
+    if numRows == 1 {
+        return s
     }
 
-    return answer
+    answer := make([]byte, len(s))
+    ai := 0
+	for row := 0; row < numRows ; row += 1 {
+        descending := false
+        for idx := row ; idx < len(s); {
+            step := 2 * (numRows - 1 - row)
+            if descending {
+                step = 2 * row
+            }
+            descending = !descending
+            if step == 0 {
+                continue
+            }
+            answer[ai] = s[idx]
+            idx += step
+            ai += 1
+        }
+	}
+    return string(answer)
 
 }
